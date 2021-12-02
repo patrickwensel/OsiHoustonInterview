@@ -1,0 +1,51 @@
+﻿@page "/questiontwo"
+@inherits QuestionTwoModalBase
+@using OsiHoustonInterview.Shared
+@inject HttpClient Http
+
+<h3>Question:</h3>
+
+<p>If a system you are working on includes programming languages or technologies you were unfamiliar with, how would you go about working on them and becoming productive?</p>
+<p>Create a function, in C#, that:</p>
+<p>1. Takes two strings as parameters</p>
+<p>2. Removes from the first string all characters that exist in the second string.</p>
+<p>3. Returns the resulting string</p>
+<p>Example:</p>
+<p>Inputs</p>
+<p>String 1: firestone</p>
+<p>String 2: fire</p>
+<p>Output</p>
+<p>ston</p>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <h2>Try It</h2>
+            </div>
+            <div class="card-body">
+                <EditForm Model="@questionTwoRequest" OnValidSubmit="SubmitStrings">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row">
+                        <label class="control-label col-md-12">First String</label>
+                        <div class="col">
+                            <InputText class="form-control" @bind-Value="questionTwoRequest.StringOne" />
+                            <ValidationMessage For="@(() => questionTwoRequest.StringOne)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-12">Second String</label>
+                        <div class="col">
+                            <InputText class="form-control" @bind-Value="questionTwoRequest.StringTwo" />
+                            <ValidationMessage For="@(() => questionTwoRequest.StringTwo)" />
+                        </div>
+                    </div>
+                    <div class="form-group" align="right">
+                        <button type="submit" class="btn btn-success">Go</button>
+                    </div>
+                </EditForm>
+                <label class="control-label col-md-12">Results: @questionTwoResponse.Result</label> 
+            </div>
+        </div>
+    </div>
+</div>

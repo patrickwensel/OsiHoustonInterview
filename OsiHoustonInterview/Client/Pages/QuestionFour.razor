@@ -1,0 +1,10 @@
+﻿@page "/questionfour"
+
+<h3>Question:</h3>
+
+<p>How would you diagnose, analyze and improve a slow SQL query?</p>
+
+<h3>Answer:</h3>
+<p>First thing I would usually do read through it to get a feeling for what it is trying to do and make sure it is doing it the best way.  For example, maybe it is using an older technology that can updated (like a cursor, unions)</p>
+<p>Second thing I would do is check the indexes and make sure the necessary ones are in place.</p>
+<p>Third, I would look at the execution plan with Profiler and see what the bottlenecks are.</p>

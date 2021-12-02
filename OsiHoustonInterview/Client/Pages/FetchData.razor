@@ -1,0 +1,108 @@
+﻿@page "/fetchdata"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using OsiHoustonInterview.Shared
+@inherits QuestionTwoModalBase
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <EditForm Model="@questionTwoRequest" OnValidSubmit="SubmitStrings">
+        <DataAnnotationsValidator />
+
+
+        <div class="form-group row">
+            <label class="control-label col-md-12">First Name</label>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="questionTwoRequest.StringOne" />
+                <ValidationMessage For="@(() => questionTwoRequest.StringOne)" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-12">Last Name</label>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="questionTwoRequest.StringTwo" />
+                <ValidationMessage For="@(() => questionTwoRequest.StringTwo)" />
+            </div>
+        </div>
+        <div class="form-group" align="right">
+            <button type="submit" class="btn btn-success">Go</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    private WeatherForecast[] forecasts;
+    protected QuestionTwoRequest questionTwoRequest = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    protected async Task SubmitStrings()
+    {
+        //customFormValidator.ClearFormErrors();
+        //isRegistrationSuccess = false;
+        try
+        {
+            var response = await Http.PostAsJsonAsync("QuestionTwo", questionTwoRequest);
+            var errors = await response.Content.ReadFromJsonAsync<Dictionary<string, List<string>>>();
+
+            //if (response.StatusCode == HttpStatusCode.BadRequest && errors.Count > 0)
+            //{
+            //    customFormValidator.DisplayFormErrors(errors);
+            //    throw new HttpRequestException($"Validation failed. Status Code: {response.StatusCode}");
+            //}
+            //else
+            //{
+            //    isRegistrationSuccess = true;
+            //    Logger.LogInformation("The registration is successful");
+            //}
+
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+
+}
